@@ -1,37 +1,58 @@
 import java.util.Stack;
 
 public class BalancedParenthesis {
-  
-  public static void main (String [] args) {
-    String str = "{([({)])}";
-    System.out.println(str + " is balanced: " + isBalanced(str));
-    
-  }
-  
-  public static boolean isBalanced(String str) {
-    Stack<Character>st = new Stack<>();
-    for(int i=0; i<str.length(); i++) {
-      char ch = str.charAt(i);
-      if (ch=='{' || ch=='(' || ch=='[') 
-        st.push(ch);
-      else if (ch=='}' || ch==')' || ch==']') {
-        char chPair = st.pop();
-        if (!checkMatch(chPair, ch))
-          return false;
-      }
+    public static void main(String[] args) {
+        System.out.println(isBalanced("(()){[]})"));
     }
-  return true;  
-  }
-  
-  public static boolean checkMatch(char ch1, char ch2) {
-    if (ch1 == '(' && ch2 == ')')  
-      return true;
-    if (ch1 == '{' && ch2 == '}')
-      return true;
-    if (ch1 == '[' && ch2 == ']')
-      return true;
-    return false;
-  }
-  
-  
+
+    private static String isBalanced(String str) {
+        Stack<Character> stack = new Stack<>();
+        for (int i=0; i<str.length(); i++) {
+            char ch = str.charAt(i);
+            if (openParanthesis(ch)){
+                stack.push(ch);
+            } else if (closeParanthesis(ch) && (!isPair(ch, stack))) {
+                    return "Not balanced";
+            }
+        }
+        return "balanced";
+    }
+
+    private static boolean openParanthesis(char ch) {
+        if (ch == '(' || ch == '{' || ch == '[') {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean closeParanthesis(char ch) {
+        if (ch == ')' || ch == '}' || ch == ']') {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isPair(char ch, Stack stack) {
+        char popped;
+        if (!stack.isEmpty()) {
+            popped = (char)stack.pop();
+        } else {
+            return false;
+        }
+        boolean ret;
+        switch (popped) {
+            case '(':
+                ret = ch == ')' ? true : false;
+                break;
+            case '{':
+                ret = ch == '}' ? true : false;
+                break;
+            case '[':
+                ret = ch == ']' ? true : false;
+                break;
+            default:
+                ret = false;
+            }
+        return ret;
+    }
 }
